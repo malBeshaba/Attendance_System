@@ -9,7 +9,7 @@ const service = axios.create({
   timeout: 3000
 });
 service.defaults.withCredentials = true
-service.defaults.headers.post['Content-type'] = 'application/json'
+// service.defaults.headers.post['Content-type'] = 'application/json'
 
 // 添加请求拦截器
 service.interceptors.request.use(config => {

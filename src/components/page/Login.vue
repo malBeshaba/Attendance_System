@@ -34,7 +34,7 @@ export default {
     data: function() {
         return {
             param: {
-                username: 0,
+                username: null,
                 password: '',
             },
             rules: {
@@ -47,10 +47,17 @@ export default {
         submitForm() {
             this.$refs.login.validate(valid => {
                 if (valid) {
-                    axios.post('http://localhost:8080/login?id=2002&password=123', {id: 2002, password: 123}).then(res => {
-                        console.log(res.data);
+                    login(this.param.username, this.param.password).then(res=> {
+                        console.log(res.data)
+                        localStorage.setItem('as_id', this.param.username);
+                        localStorage.setItem('as_depart', res.data.data.department)
+                        localStorage.setItem('ms_username', res.data.data.name);
+                        localStorage.setItem('as_rank', res.data.data.staffrank)
+                        this.$message.success('登录成功');
+                        this.$router.push('/');
                     })
-                    this.$router.push('/');
+                    // this.$message.success('登录成功');
+                    
                 } else {
                     this.$message.error('请输入账号和密码');
                     console.log('error submit!!');

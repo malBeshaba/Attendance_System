@@ -9,14 +9,11 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
-// import AMap from "vue-amap";//高德地图
-// Vue.use(AMap);
-// AMap.initAMapApiLoader({
-//   key: "70c950f8030519b7102686c1f9b87327",
-//   plugin: ["AMap.Scale", "AMap.OverView", "AMap.ToolBar", "AMap.MapType","AMap.Geolocation"],
-//   v: "1.4.4"
-// });
+import axios from 'axios'
 
+Vue.prototype.$axios = axios
+axios.defaults.baseURL = '/api'
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
 Vue.use(ElementUI, {

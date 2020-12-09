@@ -29,16 +29,16 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
             >
-                <el-table-column prop="id" label="ID" width="55" align="center" >
+                <el-table-column prop="staff_id" label="ID" width="55" align="center" >
                     <template slot-scope="scope" v-if="scope.$index < query.pageSize">
-                        {{scope.row.id}}
+                        {{scope.row.staff_id}}
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="姓名"></el-table-column>
-                <el-table-column prop="sex" label="性别"></el-table-column>
+                <el-table-column prop="gender" label="性别"></el-table-column>
 
-                <el-table-column prop="birthday" label="出生日期"></el-table-column>
-                <el-table-column prop="entry_date" label="入职日期"></el-table-column>
+                <el-table-column prop="birth_date" label="出生日期"></el-table-column>
+                <el-table-column prop="join_year" label="入职日期"></el-table-column>
                 <el-table-column prop="department" label="部门"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
@@ -65,28 +65,26 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="用户名">
-                    <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                <el-form-item label="地址">
-                    <el-input v-model="form.address"></el-input>
-                </el-form-item>
+                <el-select v-model="reportMonth" placeholder="选择月份">
+                    <el-option v-for="(a,index) in month" :key="index" :label="a" :value="a"></el-option>
+                </el-select>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <!-- <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button> -->
+                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveEdit">确 定</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
+import { staffinfo_getlist } from '../../api/index';
 export default {
     name: 'basetable',
     data() {
         return {
-            tableData: [{
+            month: [1,2,3,4,5,6,7,8,9,10,11,12],
+            tableData: [/*{
                 id: 0,
                 name: 'Shawnee',
                 sex: 'Male',
@@ -100,12 +98,12 @@ export default {
                 birthday: '2000-10-31',
                 entry_date: '2026-1-2',
                 department: 'U部门'
-            }],
+            }*/],
             query: {
                 department: '',
                 name: '',
                 pageIndex: 1,
-                pageSize: 1
+                pageSize: 50
             },
             multipleSelection: [],
             delList: [],
@@ -113,7 +111,8 @@ export default {
             pageTotal: 7,
             form: {},
             idx: -1,
-            id: -1
+            id: -1,
+            reportMonth: 1
         };
     },
     created() {
@@ -122,19 +121,16 @@ export default {
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-            // fix: 获取按搜索内容的数据
-            // fetchData(this.query).then(res => {
-            //     console.log(res);
-            //     this.tableData = res.list;
-            //     this.pageTotal = res.pageTotal || 50;
-            // });
+            staffinfo_getlist().then(res => {
+                this.tableData = res.data.data
+                this.pageTotal = res.data.data.length
+            })
         },
         // 触发搜索按钮
         handleSearch() {
             this.$set(this.query, 'pageIndex', 1);
             this.getData();
         },
-        
         
         delAllSelection() {
             const length = this.multipleSelection.length;
@@ -148,15 +144,24 @@ export default {
         },
         // add: 生成报表
         handleEdit(index, row) {
-            let id = this.tableData[index].id;
-            console.log(id);
-            // console.log(this.tableData[row].id)
-            //跳转报表界面
+            if (localStorage.getItem('as_depart') != 'Personnel') {
+                this.$message.error(`您没有对应权限`)
+            } else {
+                this.id = this.tableData[index].staff_id;
+
+                // console.log(id);
+                this.editVisible = true;
+            }
+            
         },
         // 分页导航
         handlePageChange(val) {
             this.$set(this.query, 'pageIndex', val);
             this.getData();
+        },
+        saveEdit() {
+            console.log(this.reportMonth)
+            this.$router.push('/report/'+this.reportMonth+'/'+this.id)
         }
     }
 };

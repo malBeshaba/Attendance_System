@@ -105,6 +105,11 @@ export default new Router({
                     meta: { title: '权限测试', permission: true }
                 },
                 {
+                    path: '/report/:month/:id',
+                    component:() => import('../components/page/ReportTable.vue'),
+                    meta: {title: '报表'}
+                },
+                {
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' }

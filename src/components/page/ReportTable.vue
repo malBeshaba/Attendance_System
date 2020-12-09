@@ -22,11 +22,7 @@
                             <label class="blue">{{punch_date}}</label>/{{date}}
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="签到情况">
-                        <el-col>
-
-                        </el-col>
-                    </el-form-item>
+                  
                     <el-form-item label="请假情况">
                         <el-table @row-click="goto" :show-header="false" :data="todoList" style="width:100%;">
                             <el-table-column>
@@ -50,11 +46,13 @@
 </template>
 
 <script>
+import {month_report} from '../../api/index'
 export default {
     name: 'baseform',
     data() {
         return {
             id: 0,
+            month: 0,
             name: 'Shawnee',
             punch_date: 22,
             date: 31,
@@ -64,6 +62,14 @@ export default {
             }],
             wages: 30000
         };
+    },
+    created() {
+        this.id = this.$route.params.id
+        this.month = this.$route.params.month
+        console.log(this.month)
+        month_report(this.month, this.id).then(res => {
+            
+        })
     },
     methods: {
         getDate() {
