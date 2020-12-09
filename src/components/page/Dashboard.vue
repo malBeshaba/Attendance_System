@@ -19,14 +19,26 @@
                         <span>东莞</span>
                     </div>
                 </el-card>
-                <el-card shadow="hover" style="height:252px;">
+                <el-card shadow="hover" style="height:600px;">
                     <div slot="header" class="clearfix">
                         <span>语言详情</span>
-                    </div>Vue
-                    <el-progress :percentage="71.3" color="#42b983"></el-progress>JavaScript
-                    <el-progress :percentage="24.1" color="#f1e05a"></el-progress>CSS
-                    <el-progress :percentage="13.7"></el-progress>HTML
-                    <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
+                    </div>
+                    年假
+                    <el-progress v-bind:percentage="holidays_list.annual_leave.percentage" v-bind:color="holidays_list.annual_leave.color"></el-progress>
+                    病假
+                    <el-progress v-bind:percentage="holidays_list.sick_leave.percentage" v-bind:color="holidays_list.sick_leave.color"></el-progress>
+                    婚假
+                    <el-progress v-bind:percentage="holidays_list.marriage_hollday.percentage" v-bind:color="holidays_list.marriage_hollday.color"></el-progress>
+                    产假
+                    <el-progress v-bind:percentage="holidays_list.maternity_leave.percentage" v-bind:color="holidays_list.maternity_leave.color"></el-progress>
+                    产检假
+                    <el-progress v-bind:percentage="holidays_list.maternity_check.percentage" v-bind:color="holidays_list.maternity_check.color"></el-progress>
+                    哺乳假
+                    <el-progress v-bind:percentage="holidays_list.lactation_leave.percentage" v-bind:color="holidays_list.lactation_leave.color"></el-progress>
+                    陪产假
+                    <el-progress v-bind:percentage="holidays_list.paternity_leave.percentage" v-bind:color="holidays_list.paternity_leave.color"></el-progress>
+                    事假
+                    <el-progress v-bind:percentage="holidays_list.compassionate_leave.percentage" v-bind:color="holidays_list.compassionate_leave.color"></el-progress>
                 </el-card>
             </el-col>
             <el-col :span="16">
@@ -34,32 +46,30 @@
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
                             <div class="grid-content grid-con-1">
-                                <i class="el-icon-lx-people grid-con-icon"></i>
+                                <i class="el-icon-lx-remind grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">1234</div>
-                                    <div>用户访问量</div>
+                                    <div class="grid-num">{{holidays}}</div>
+                                    <div>剩余假期</div>
                                 </div>
                             </div>
                         </el-card>
                     </el-col>
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
-                            <div class="grid-content grid-con-2">
-                                <i class="el-icon-lx-notice grid-con-icon"></i>
+                            <div class="grid-content grid-con-2" @click="leave">
+                                <i class="el-icon-lx-punch grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">321</div>
-                                    <div>系统消息</div>
+                                    <div>请假</div>
                                 </div>
                             </div>
                         </el-card>
                     </el-col>
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
-                            <div class="grid-content grid-con-3">
-                                <i class="el-icon-lx-goods grid-con-icon"></i>
+                            <div class="grid-content grid-con-3" @click="punch">
+                                <i class="el-icon-lx-locationfill grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">5000</div>
-                                    <div>数量</div>
+                                    <div>打卡</div>
                                 </div>
                             </div>
                         </el-card>
@@ -67,27 +77,19 @@
                 </el-row>
                 <el-card shadow="hover" style="height:403px;">
                     <div slot="header" class="clearfix">
-                        <span>待办事项</span>
-                        <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
+                        <span>请假记录</span>
                     </div>
-                    <el-table :show-header="false" :data="todoList" style="width:100%;">
-                        <el-table-column width="40">
-                            <template slot-scope="scope">
-                                <el-checkbox v-model="scope.row.status"></el-checkbox>
-                            </template>
-                        </el-table-column>
+                    <el-table @row-click="goto" :show-header="false" :data="todoList" style="width:100%;">
                         <el-table-column>
                             <template slot-scope="scope">
                                 <div
                                     class="todo-item"
-                                    :class="{'todo-item-del': scope.row.status}"
                                 >{{scope.row.title}}</div>
                             </template>
                         </el-table-column>
-                        <el-table-column width="60">
-                            <template>
-                                <i class="el-icon-edit"></i>
-                                <i class="el-icon-delete"></i>
+                        <el-table-column width="170">
+                            <template slot-scope="scope">
+                                <div class="todo-date">{{scope.row.date}}</div>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -95,6 +97,15 @@
             </el-col>
         </el-row>
         <el-row :gutter="20">
+            <el-col :span="16">
+                <!-- <Calendar
+                class="calendar"
+                :markDate=arr
+                
+                ></Calendar> -->
+            </el-col>
+        </el-row>
+        <!-- <el-row :gutter="20">
             <el-col :span="12">
                 <el-card shadow="hover">
                     <schart ref="bar" class="schart" canvasId="bar" :options="options"></schart>
@@ -105,121 +116,100 @@
                     <schart ref="line" class="schart" canvasId="line" :options="options2"></schart>
                 </el-card>
             </el-col>
-        </el-row>
+        </el-row> -->
     </div>
 </template>
 
 <script>
 import Schart from 'vue-schart';
 import bus from '../common/bus';
+import { location } from '../../utils/Location'
+import Calendar from 'vue-calendar-component';
+// import axios from 'axios'
 export default {
     name: 'dashboard',
     data() {
         return {
+            arr: ['2020/12/11','2020/12/12'],
             name: localStorage.getItem('ms_username'),
+            holidays: 0,
+            color_l: {
+                green: '#42b983',
+                yellow: '#f1e05a',
+                red: '#f56c6c'
+            },
+            holidays_list: {/*int */
+                annual_leave: {
+                    percentage: 71.3,
+                    color: '#42b983'
+                },
+                sick_leave: {
+                    percentage: 71.3,
+                    color: '#42b983'
+                },
+                marriage_hollday: {
+                    percentage: 71.3,
+                    color: '#42b983'
+                },
+                maternity_leave: {
+                    percentage: 71.3,
+                    color: '#42b983'
+                },
+                maternity_check: {
+                    percentage: 71.3,
+                    color: '#42b983'
+                },
+                lactation_leave: {
+                    percentage: 71.3,
+                    color: '#42b983'
+                },
+                paternity_leave: {
+                    percentage: 71.3,
+                    color: '#42b983'
+                },
+                compassionate_leave: {
+                    percentage: 71.3,
+                    color: '#42b983'
+                }
+            },
             todoList: [
                 {
                     title: '今天要修复100个bug',
-                    status: false
+                    date: '2020-11-1 10:22'
                 },
                 {
                     title: '今天要修复100个bug',
-                    status: false
+                    date: '2020-11-1 10:22'
                 },
                 {
                     title: '今天要写100行代码加几个bug吧',
-                    status: false
+                    date: '2020-11-1 10:22'
                 },
                 {
                     title: '今天要修复100个bug',
-                    status: false
+                    date: '2020-11-1 10:22'
                 },
                 {
                     title: '今天要修复100个bug',
-                    status: true
+                    date: '2020-11-1 10:22'
                 },
                 {
                     title: '今天要写100行代码加几个bug吧',
-                    status: true
+                    date: '2020-11-1 10:22'
                 }
             ],
-            data: [
-                {
-                    name: '2018/09/04',
-                    value: 1083
-                },
-                {
-                    name: '2018/09/05',
-                    value: 941
-                },
-                {
-                    name: '2018/09/06',
-                    value: 1139
-                },
-                {
-                    name: '2018/09/07',
-                    value: 816
-                },
-                {
-                    name: '2018/09/08',
-                    value: 327
-                },
-                {
-                    name: '2018/09/09',
-                    value: 228
-                },
-                {
-                    name: '2018/09/10',
-                    value: 1065
-                }
-            ],
-            options: {
-                type: 'bar',
-                title: {
-                    text: '最近一周各品类销售图'
-                },
-                xRorate: 25,
-                labels: ['周一', '周二', '周三', '周四', '周五'],
-                datasets: [
-                    {
-                        label: '家电',
-                        data: [234, 278, 270, 190, 230]
-                    },
-                    {
-                        label: '百货',
-                        data: [164, 178, 190, 135, 160]
-                    },
-                    {
-                        label: '食品',
-                        data: [144, 198, 150, 235, 120]
-                    }
-                ]
-            },
-            options2: {
-                type: 'line',
-                title: {
-                    text: '最近几个月各品类销售趋势图'
-                },
-                labels: ['6月', '7月', '8月', '9月', '10月'],
-                datasets: [
-                    {
-                        label: '家电',
-                        data: [234, 278, 270, 190, 230]
-                    },
-                    {
-                        label: '百货',
-                        data: [164, 178, 150, 135, 160]
-                    },
-                    {
-                        label: '食品',
-                        data: [74, 118, 200, 235, 90]
-                    }
-                ]
+            local: {
+                lat: '',
+                lng: '',
+                province: '',
+                city: '',
+                district: ''
             }
         };
     },
     components: {
-        Schart
+        Schart,
+        Calendar
     },
     computed: {
         role() {
@@ -237,7 +227,36 @@ export default {
     //     window.removeEventListener('resize', this.renderChart);
     //     bus.$off('collapse', this.handleBus);
     // },
+    mounted: function() {
+        this.getLocation();
+    },
     methods: {
+        getLocation() {
+            let _that = this;
+            let geolocation = location.initMap("map-container"); //定位
+            AMap.event.addListener(geolocation, "complete", result => {
+                console.log(result)
+                _that.local.lat = result.position.lat;
+                _that.local.lng = result.position.lng;
+                _that.local.province = result.position.province;
+                _that.local.city = result.addressComponent.city;
+                _that.local.district = result.addressComponent.district;
+            });
+        },
+        goto() {
+            this.$router.push("/apply");
+        },
+        leave() {
+            this.$router.push("/calendar");
+        },
+        punch() {
+            if (this.local.district == '津南区') {
+                this.$message.success(`打卡成功`);
+            } else {
+                this.$message.false(`打卡失败`);
+            }
+            // this.$router.push("/src/components/page/404.vue");
+        },
         changeDate() {
             const now = new Date().getTime();
             this.data.forEach((item, index) => {
@@ -369,8 +388,15 @@ export default {
     color: #999;
 }
 
+.todo-date {
+    font-size: 14px;
+}
+
 .schart {
     width: 100%;
     height: 300px;
+}
+.calendar {
+    background-color: white;
 }
 </style>

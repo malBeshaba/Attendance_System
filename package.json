@@ -12,7 +12,10 @@
     "babel-polyfill": "^6.26.0",
     "element-ui": "^2.11.0",
     "mavon-editor": "^2.6.17",
+    "v-viewer": "^1.5.1",
     "vue": "^2.6.10",
+    "vue-amap": "^0.5.10",
+    "vue-calendar-component": "^2.8.2",
     "vue-cropperjs": "^3.0.0",
     "vue-i18n": "^8.10.0",
     "vue-quill-editor": "^3.0.6",
@@ -23,6 +26,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.9.0",
     "@vue/cli-service": "^3.9.0",
+    "vue-resource": "^1.5.1",
     "vue-template-compiler": "^2.6.10"
   }
 }

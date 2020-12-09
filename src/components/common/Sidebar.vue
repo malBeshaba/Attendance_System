@@ -81,6 +81,10 @@ export default {
                             title: '基本表单'
                         },
                         {
+                            index: 'apply',
+                            title: '申请展示'
+                        },
+                        {
                             index: '3-2',
                             title: '三级菜单',
                             subs: [

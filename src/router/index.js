@@ -17,7 +17,19 @@ export default new Router({
                 {
                     path: '/dashboard',
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
-                    meta: { title: '系统首页' }
+                    meta: { title: '系统首页' },
+                    children: [
+                        {
+                            path: '/BaseForm',
+                            component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
+                            meta: { title: '基本表单' }
+                        }
+                    ]
+                },
+                {
+                    path: '/calendar',
+                    component: () => import('../components/page/calendar.vue'),
+                    meta: {title: '日历'}
                 },
                 {
                     path: '/icon',
@@ -38,6 +50,11 @@ export default new Router({
                     path: '/form',
                     component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
                     meta: { title: '基本表单' }
+                },
+                {
+                    path: '/apply',
+                    component: () => import('../components/page/applyTable.vue'),
+                    meta: { title: '申请展示'}
                 },
                 {
                     // 富文本编辑器组件
