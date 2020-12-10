@@ -66,6 +66,15 @@ export function leave_record(id) {
         }
     })
 }
+export function record(id) {
+    return axios({
+        method: 'get',
+        url: baseURL + 'leave_record/record',
+        params: {
+            record_id: id
+        }
+    })
+}
 // 时间段请假记录
 export function leave_record_fromTo(id, from, to) {
     return axios({
@@ -91,13 +100,12 @@ export function approve(obj) {
     })
 }
 // 审批列表
-export function approve_getlist(m,l) {
+export function approve_getlist(m) {
     return axios({
         method: 'get',
         url: baseURL + 'approve/getlist',
         params: {
-            my_id: m,
-            leaveman_id: l
+            my_id: m
         }
     })
 }

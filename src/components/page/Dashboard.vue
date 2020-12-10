@@ -21,7 +21,7 @@
                 </el-card>
                 <el-card shadow="hover" style="height:400px;">
                     <div slot="header" class="clearfix">
-                        <span>语言详情</span>
+                        <span>假期余额</span>
                     </div>
                     年假
                     <el-progress v-bind:percentage="holidays_list.annual_leave.percentage" v-bind:color="holidays_list.annual_leave.color"></el-progress>
@@ -226,9 +226,9 @@ export default {
     methods: {
         rank_switch(i) {
             switch(i) {
-                case 1: return '普通员工'
-                case 2: return '部门经理'
-                case 3: return '总经理'
+                case '1': return '普通员工'
+                case '2': return '部门经理'
+                case '3': return '总经理'
             }
         },
         leave_type(str) {
@@ -265,11 +265,12 @@ export default {
                 _that.local.detail = result.formattedAddress;
             });
         },
-        goto() {
-            this.$router.push("/apply");
+        goto(row) {
+            // console.log()
+            this.$router.push("/apply/"+row.leave_record_id);
         },
         leave() {
-            this.$router.push("/calendar");
+            this.$router.push("/form");
         },
         punch() {
             // if (this.local.district == '津南区') {

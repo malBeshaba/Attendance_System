@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import {record} from '../../api/index'
 export default {
     name: 'baseform',
     data() {
@@ -57,7 +58,24 @@ export default {
             desc: '哈哈哈哈哈哈哈哈',
         };
     },
+    created() {
+        let record_id = this.$route.params.rid
+        record(record_id).then(res => {
+            this.id = localStorage.getItem('as_id')
+            this.type = this.leave_type(res.data.data[0].type)
+            this.date1 = res.data.data[0].start_time.slice(0,10)
+            this.date2 = res.data.data[0].end_time.slice(0, 10)
+            this.desc = res.data.data[0].reason | ''
+        })
+    },
     methods: {
+        leave_type(str) {
+                switch(str) {
+                    case 'annual': return '年假'
+                    case 'compassionate': return '事假'
+                    case 'sick': return '病假'
+                }
+            }
         // onSubmit() {
         //     this.$message.success('提交成功！');
         // }

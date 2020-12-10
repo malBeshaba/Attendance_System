@@ -79,6 +79,8 @@
 
 <script>
 import { staffinfo_getlist } from '../../api/index';
+import { Message } from "element-ui";
+
 export default {
     name: 'basetable',
     data() {
@@ -116,7 +118,20 @@ export default {
         };
     },
     created() {
-        this.getData();
+        if (localStorage.getItem('as_rank') != 1) {
+            this.getData();
+        } 
+        
+    },
+    mounted() {
+        this.$nextTick(()=>{
+            if(this.tableData.length == 0) {
+                this.$message({
+                    type: 'error',
+                    message: '无权限'
+                })
+            }
+        });
     },
     methods: {
         // 获取 easy-mock 的模拟数据
