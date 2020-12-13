@@ -15,12 +15,12 @@
                     class="handle-del mr10"
                     @click="delAllSelection"
                 >批量删除</el-button> -->
-                <el-select v-model="query.department" placeholder="部门" class="handle-select mr10">
+                <!-- <el-select v-model="query.department" placeholder="部门" class="handle-select mr10">
                     <el-option key="1" label="T部门" value="T部门"></el-option>
                     <el-option key="2" label="U部门" value="U部门"></el-option>
                 </el-select>
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button> -->
             </div>
             <el-table
                 :data="tableData"
@@ -125,7 +125,7 @@ export default {
     },
     mounted() {
         this.$nextTick(()=>{
-            if(this.tableData.length == 0) {
+            if(localStorage.getItem('as_rank') == 1) {
                 this.$message({
                     type: 'error',
                     message: '无权限'
@@ -134,6 +134,14 @@ export default {
         });
     },
     methods: {
+        switch_gender(str){
+            if(str == 'female'){
+                return '女'
+            }
+            else{
+                return '男'
+            }
+        },
         // 获取 easy-mock 的模拟数据
         getData() {
             staffinfo_getlist().then(res => {

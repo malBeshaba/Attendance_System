@@ -12,7 +12,7 @@
                     </div>
                     <div class="user-info-list">
                         所属部门：
-                        <span>{{department}}</span>
+                        <span>{{department_switch(department)}}</span>
                     </div>
                     <div class="user-info-list">
                         职位：
@@ -163,7 +163,7 @@ export default {
                 {"date":"2020-12-17","content":"已打卡"}
             ],
 
-            value: new Date(2020,0,1)
+            value: new Date()
         };
     },
     components: {
@@ -185,7 +185,7 @@ export default {
             this.holidays_list.sick_leave.percentage = res.data.data.sick * 100 / 5
             this.holidays_list.compassionate_leave.percentage = 100 
         })
-        month_report(1, id).then(res => {
+        month_report(12, id).then(res => {
             this.resDate = res.data.check_records
         })
     },
@@ -224,6 +224,13 @@ export default {
         this.getLocation();
     },
     methods: {
+        department_switch(de) {
+            switch(de) {
+                case 'Personnel': return '人事科'
+                case 'Finance': return '财务科'
+                case 'Boss': return '总公司'
+            }
+        },
         rank_switch(i) {
             switch(i) {
                 case '1': return '普通员工'
@@ -241,11 +248,21 @@ export default {
         dealMyDate(v) {
             // console.log(v)
             let len = this.resDate.length
+            /* console.log(len)
+            console.log(this.resDate) */
             let res = ""
             for(let i=0; i<len; i++){
+                /* console.log(this.resDate[i].checktime.slice(0,10)) */
                 this.resDate[i].checktime = this.resDate[i].checktime.slice(0,10)
+                /* let j = parseInt(this.resDate[i].checktime.slice(9,10)) + 1 */
+                let j = 10
+                /* console.log(j) */
+                /* console.log(this.resDate[i].checktime) */
+                let t = j+'' 
+                this.resDate[i].checktime = this.resDate[i].checktime.slice(0,8) + t
+                console.log(this.resDate[i].checktime)
                 if(this.resDate[i].checktime == v) {
-                    /* res = this.resDate[i].content */
+                    /* res = this.resDate[i].content  */
                     return true
                     break
                 }
@@ -289,7 +306,11 @@ export default {
                                     console.log(res.data.code)
 
                 if (res.data.code == 0) {
+                    
                     this.$message.success(`打卡成功`)
+                    month_report(12, id).then(res => {
+                      this.resDate = res.data.check_records
+                    })
                 } else {
                     this.$message.false(`打卡失败`)
                 }

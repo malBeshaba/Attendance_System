@@ -112,13 +112,13 @@ export default {
                 appendix: this.fileList[0],
                 duration: 2
             }
-            // holiday_apply(obj).then(res => {
-            //     if (res.data.code == 0) {
-            //         this.$message.success('提交成功！')
-            //     } else {
-            //         this.$message.false('提交失败，请重试')
-            //     }
-            // })
+            holiday_apply(obj).then(res => {
+                if (res.data.code == 0) {
+                    this.$message.success('提交成功！')
+                } else {
+                    this.$message.false('提交失败，请重试')
+                }
+            })
         },
     }
 };
